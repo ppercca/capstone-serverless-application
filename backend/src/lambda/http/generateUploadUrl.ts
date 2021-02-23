@@ -4,8 +4,8 @@ import { generateUploadUrl } from '../../businessLogic/Photos';
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   console.log("Processing Event ", event);
-  const todoId = event.pathParameters.todoId
-  const URL = await generateUploadUrl(todoId);
+  const photoId = event.pathParameters.photoId
+  const URL = await generateUploadUrl(photoId);
 
   return {
     statusCode: 202,

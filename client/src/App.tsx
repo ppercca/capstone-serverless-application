@@ -57,7 +57,7 @@ export default class App extends Component<AppProps, AppState> {
     return (
       <Menu>
         <Menu.Item name="home">
-          <Link to="/">Home</Link>
+          <Link to="/">My Album</Link>
         </Menu.Item>
 
         <Menu.Menu position="right">{this.logInLogOutButton()}</Menu.Menu>
@@ -97,7 +97,7 @@ export default class App extends Component<AppProps, AppState> {
         />
 
         <Route
-          path="/todos/:todoId/edit"
+          path="/photos/:photoId/edit"
           exact
           render={props => {
             return <EditTodo {...props} auth={this.props.auth} />

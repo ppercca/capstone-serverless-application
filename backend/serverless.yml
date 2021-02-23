@@ -27,7 +27,6 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  # TODO: Configure this function
   GetPhotos:
     handler: src/lambda/http/getPhotos.handler
     events:
@@ -48,7 +47,6 @@ functions:
         Resource: 
           - '*'
 
-  # TODO: Configure this function
   CreatePhoto:
     handler: src/lambda/http/createPhoto.handler
     events:
@@ -75,7 +73,6 @@ functions:
         Resource: 
           - '*'
 
-  # TODO: Configure this function
   UpdatePhoto:
     handler: src/lambda/http/updatePhoto.handler
     events:
@@ -102,7 +99,6 @@ functions:
         Resource: 
           - '*'
 
-  # TODO: Configure this function
   DeletePhoto:
     handler: src/lambda/http/deletePhoto.handler
     events:
@@ -123,7 +119,6 @@ functions:
         Resource: 
           - '*'
 
-  # TODO: Configure this function
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -142,7 +137,7 @@ functions:
 
 resources:
   Resources:
-    # TODO: Add any necessary AWS resources
+
     PhotosTable:
       Type: AWS::DynamoDB::Table
       Properties:
