@@ -1,5 +1,4 @@
 export interface PhotoUpdate {
-  name: string
-  dueDate: string
-  done: boolean
+  description: string
+  creationDate: string
 }

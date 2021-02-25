@@ -23,7 +23,6 @@ export function createPhoto(createPhotoRequest: CreatePhotoRequest, jwtToken: st
     photoId: photoId,
     attachmentUrl: `https://${s3BucketName}.s3.amazonaws.com/${photoId}`,
     createdAt: new Date().getTime().toString(),
-    done: false,
     ...createPhotoRequest,
   });
 }

@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const split = authorization.split(' ');
   const jwtToken = split[1];
 
-  if (newPhoto.name) {
+  if (newPhoto.description) {
     const toDoItem = await createPhoto(newPhoto, jwtToken);
     return {
       statusCode: 201,

@@ -56,16 +56,14 @@ export class PhotoAccess {
         "userId": userId,
         "photoId": photoId
       },
-      UpdateExpression: "set #a = :a, #b = :b, #c = :c",
+      UpdateExpression: "set #a = :a, #b = :b",
       ExpressionAttributeNames: {
-        "#a": "name",
-        "#b": "dueDate",
-        "#c": "done"
+        "#a": "description",
+        "#b": "creationDate"
       },
       ExpressionAttributeValues: {
-        ":a": photoUpdate['name'],
-        ":b": photoUpdate['dueDate'],
-        ":c": photoUpdate['done']
+        ":a": photoUpdate['description'],
+        ":b": photoUpdate['creationDate']
       },
       ReturnValues: "ALL_NEW"
     };

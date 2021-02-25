@@ -2,7 +2,7 @@ import dateFormat from 'dateformat'
 import * as React from 'react'
 import { Form, Button, Input } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { getUploadUrl, uploadFile, patchTodo } from '../api/todos-api'
+import { getUploadUrl, uploadFile, createTodo } from '../api/todos-api'
 
 enum UploadState {
   NoUpload,
@@ -25,7 +25,7 @@ interface EditTodoState {
   description: string
 }
 
-export class EditTodo extends React.PureComponent<
+export class CreateTodo extends React.PureComponent<
   EditTodoProps,
   EditTodoState
 > {
@@ -33,9 +33,6 @@ export class EditTodo extends React.PureComponent<
     file: undefined,
     uploadState: UploadState.NoUpload,
     description: ''
-  }
-  handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ description: event.target.value })
   }
 
   handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +43,10 @@ export class EditTodo extends React.PureComponent<
       file: files[0]
     })
   }
+  
+  handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ description: event.target.value })
+  }
 
   handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault()
@@ -55,22 +56,23 @@ export class EditTodo extends React.PureComponent<
         alert('File should be selected')
         return
       }
-
       const creationDate = this.calculateDueDate()
       const description = this.state.description;
 
-      await patchTodo(this.props.auth.getIdToken(), this.props.match.params.photoId, {
+      const newTodo = await createTodo(this.props.auth.getIdToken(), {
         description: description,
         creationDate: creationDate
       })
 
+      console.log('photoId -->' + newTodo.photoId)
+
       this.setUploadState(UploadState.FetchingPresignedUrl)
-      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.photoId)
+      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), newTodo.photoId)
 
       this.setUploadState(UploadState.UploadingFile)
       await uploadFile(uploadUrl, this.state.file)
 
-      alert('Your photo was updated!')
+      alert('The photo was created!')
     } catch (e) {
       alert('Could not upload a file: ' + e.message)
     } finally {
@@ -87,18 +89,18 @@ export class EditTodo extends React.PureComponent<
   render() {
     return (
       <div>
-        <h1>Update Photo</h1>
+        <h1>Create Photo</h1>
 
         <Form onSubmit={this.handleSubmit}>
-          <Form.Field>
-          <label>Photo Description</label>
+        <Form.Field>
+          <label>Description</label>
             <Input
                 placeholder="Description"
                 onChange={this.handleNameChange}
             />
           </Form.Field>
           <Form.Field>
-            <label>Photo</label>
+            <label>File</label>
             <input
               type="file"
               accept="image/*"
@@ -122,7 +124,7 @@ export class EditTodo extends React.PureComponent<
           loading={this.state.uploadState !== UploadState.NoUpload}
           type="submit"
         >
-          Update
+          Create
         </Button>
       </div>
     )

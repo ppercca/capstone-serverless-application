@@ -1,23 +1,22 @@
-# Serverless TODO
+# Serverless Photo
 
-To implement this project, you need to implement a simple TODO application using AWS Lambda and Serverless framework. Search for all comments starting with the `TODO:` in the code to find the placeholders that you need to implement.
+To implement this project, you need to implement a simple Photo application using AWS Lambda and Serverless framework. Search for all comments starting with the `Photo:` in the code to find the placeholders that you need to implement.
 
 # Functionality of the application
 
-This application will allow creating/removing/updating/fetching TODO items. Each TODO item can optionally have an attachment image. Each user only has access to TODO items that he/she has created.
+This application will allow creating/removing/updating/fetching Photo items. Each Photo item can optionally have an attachment image. Each user only has access to Photo items that he/she has created.
 
-# TODO items
+# Photo items
 
-The application should store TODO items, and each TODO item contains the following fields:
+The application should store Photo items, and each Photo item contains the following fields:
 
 * `photoId` (string) - a unique id for an item
 * `createdAt` (string) - date and time when an item was created
-* `name` (string) - name of a TODO item (e.g. "Change a light bulb")
-* `dueDate` (string) - date and time by which an item should be completed
-* `done` (boolean) - true if an item was completed, false otherwise
-* `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a TODO item
+* `description` (string) - description of a photo item (e.g. "Change a light bulb")
+* `creationDate` (string) - date and time by which an item was created or modified
+* `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a Photo item
 
-You might also store an id of a user who created a TODO item.
+You might also store an id of a user who created a Photo item.
 
 
 # Functions to be implemented
@@ -26,7 +25,7 @@ To implement this project, you need to implement the following functions and con
 
 * `Auth` - this function should implement a custom authorizer for API Gateway that should be added to all other functions.
 
-* `GetTodos` - should return all TODOs for a current user. A user id can be extracted from a JWT token that is sent by the frontend
+* `GetPhotos` - should return all Photos for a current user. A user id can be extracted from a JWT token that is sent by the frontend
 
 It should return data that looks like this:
 
@@ -37,37 +36,34 @@ It should return data that looks like this:
       "photoId": "123",
       "createdAt": "2019-07-27T20:01:45.424Z",
       "name": "Buy milk",
-      "dueDate": "2019-07-29T20:01:45.424Z",
-      "done": false,
+      "creationDate": "2019-07-29T20:01:45.424Z",
       "attachmentUrl": "http://example.com/image.png"
     },
     {
       "photoId": "456",
       "createdAt": "2019-07-27T20:01:45.424Z",
       "name": "Send a letter",
-      "dueDate": "2019-07-29T20:01:45.424Z",
-      "done": true,
+      "creationDate": "2019-07-29T20:01:45.424Z",
       "attachmentUrl": "http://example.com/image.png"
     },
   ]
 }
 ```
 
-* `CreateTodo` - should create a new TODO for a current user. A shape of data send by a client application to this function can be found in the `CreateTodoRequest.ts` file
+* `CreatePhoto` - should create a new Photo for a current user. A shape of data send by a client application to this function can be found in the `CreatePhotoRequest.ts` file
 
-It receives a new TODO item to be created in JSON format that looks like this:
+It receives a new Photo item to be created in JSON format that looks like this:
 
 ```json
 {
   "createdAt": "2019-07-27T20:01:45.424Z",
   "name": "Buy milk",
-  "dueDate": "2019-07-29T20:01:45.424Z",
-  "done": false,
+  "creationDate": "2019-07-29T20:01:45.424Z",
   "attachmentUrl": "http://example.com/image.png"
 }
 ```
 
-It should return a new TODO item that looks like this:
+It should return a new Photo item that looks like this:
 
 ```json
 {
@@ -75,22 +71,20 @@ It should return a new TODO item that looks like this:
     "photoId": "123",
     "createdAt": "2019-07-27T20:01:45.424Z",
     "name": "Buy milk",
-    "dueDate": "2019-07-29T20:01:45.424Z",
-    "done": false,
+    "creationDate": "2019-07-29T20:01:45.424Z",
     "attachmentUrl": "http://example.com/image.png"
   }
 }
 ```
 
-* `UpdateTodo` - should update a TODO item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTodoRequest.ts` file
+* `UpdatePhoto` - should update a Photo item created by a current user. A shape of data send by a client application to this function can be found in the `UpdatePhotoRequest.ts` file
 
-It receives an object that contains three fields that can be updated in a TODO item:
+It receives an object that contains three fields that can be updated in a Photo item:
 
 ```json
 {
   "name": "Buy bread",
-  "dueDate": "2019-07-29T20:01:45.424Z",
-  "done": true
+  "creationDate": "2019-07-29T20:01:45.424Z"
 }
 ```
 
@@ -98,11 +92,11 @@ The id of an item that should be updated is passed as a URL parameter.
 
 It should return an empty body.
 
-* `DeleteTodo` - should delete a TODO item created by a current user. Expects an id of a TODO item to remove.
+* `DeletePhoto` - should delete a Photo item created by a current user. Expects an id of a Photo item to remove.
 
 It should return an empty body.
 
-* `GenerateUploadUrl` - returns a pre-signed URL that can be used to upload an attachment file for a TODO item.
+* `GenerateUploadUrl` - returns a pre-signed URL that can be used to upload an attachment file for a Photo item.
 
 It should return a JSON object that looks like this:
 
@@ -171,11 +165,11 @@ Once you have finished developing your application, please set `apiId` and Auth0
 
 # Suggestions
 
-To store TODO items, you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to create a DynamoDB resource like this:
+To store Photo items, you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to create a DynamoDB resource like this:
 
 ```yml
 
-TodosTable:
+PhotosTable:
   Type: AWS::DynamoDB::Table
   Properties:
     AttributeDefinitions:
@@ -191,7 +185,7 @@ TodosTable:
       - AttributeName: sortKey
         KeyType: RANGE
     BillingMode: PAY_PER_REQUEST
-    TableName: ${self:provider.environment.TODOS_TABLE}
+    TableName: ${self:provider.environment.PhotoS_TABLE}
     LocalSecondaryIndexes:
       - IndexName: ${self:provider.environment.INDEX_NAME}
         KeySchema:
@@ -241,7 +235,7 @@ npm install
 npm run start
 ```
 
-This should start a development server with the React application that will interact with the serverless TODO application.
+This should start a development server with the React application that will interact with the serverless Photo application.
 
 # Postman collection
 

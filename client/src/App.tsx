@@ -4,6 +4,7 @@ import { Grid, Menu, Segment } from 'semantic-ui-react'
 
 import Auth from './auth/Auth'
 import { EditTodo } from './components/EditTodo'
+import { CreateTodo } from './components/CreateTodo'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
 import { Todos } from './components/Todos'
@@ -103,7 +104,13 @@ export default class App extends Component<AppProps, AppState> {
             return <EditTodo {...props} auth={this.props.auth} />
           }}
         />
-
+        <Route
+          path="/photos/create"
+          exact
+          render={props => {
+            return <CreateTodo {...props} auth={this.props.auth} />
+          }}
+        />
         <Route component={NotFound} />
       </Switch>
     )

@@ -44,12 +44,16 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     this.props.history.push(`/photos/${photoId}/edit`)
   }
 
+  onCreateButtonClick = () => {
+    this.props.history.push(`/photos/create`)
+  }
+
   onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
-      const dueDate = this.calculateDueDate()
+      const creationDate = this.calculateDueDate()
       const newTodo = await createTodo(this.props.auth.getIdToken(), {
-        name: this.state.newTodoName,
-        dueDate
+        description: this.state.newTodoName,
+        creationDate
       })
       this.setState({
         todos: [...this.state.todos, newTodo],
@@ -71,23 +75,22 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     }
   }
 
-  onTodoCheck = async (pos: number) => {
-    try {
-      const todo = this.state.todos[pos]
-      await patchTodo(this.props.auth.getIdToken(), todo.photoId, {
-        name: todo.name,
-        dueDate: todo.dueDate,
-        done: !todo.done
-      })
-      this.setState({
-        todos: update(this.state.todos, {
-          [pos]: { done: { $set: !todo.done } }
-        })
-      })
-    } catch {
-      alert('Todo deletion failed')
-    }
-  }
+  // onTodoCheck = async (pos: number) => {
+  //   try {
+  //     const todo = this.state.todos[pos]
+  //     await patchTodo(this.props.auth.getIdToken(), todo.photoId, {
+  //       description: todo.description,
+  //       dueDate: todo.dueDate
+  //     })
+  //     this.setState({
+  //       todos: update(this.state.todos, {
+  //         [pos]: { done: { $set: !todo.done } }
+  //       })
+  //     })
+  //   } catch {
+  //     alert('Todo deletion failed')
+  //   }
+  // }
 
   async componentDidMount() {
     try {
@@ -117,7 +120,15 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     return (
       <Grid.Row>
         <Grid.Column width={16}>
-          <Input
+          <Button
+            icon
+            labelPosition='left'
+            color="blue"
+            onClick={() => this.onCreateButtonClick()}>
+            <Icon name="add" />
+            Photo
+          </Button>
+          {/* <Input
             action={{
               color: 'blue',
               labelPosition: 'left',
@@ -127,9 +138,9 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
             }}
             fluid
             actionPosition="left"
-            placeholder="To change the world..."
+            placeholder="Description of the new Photo ..."
             onChange={this.handleNameChange}
-          />
+          /> */}
         </Grid.Column>
         <Grid.Column width={16}>
           <Divider />
@@ -158,56 +169,58 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   renderTodosList() {
     return (
-      <Grid padded>
+      <Grid>
+        <Grid.Row columns={3}>
         {this.state.todos.map((todo, pos) => {
           return (
-            <Grid.Row key={todo.photoId}>
-              <Grid.Column width={1} verticalAlign="middle">
-                <Checkbox
-                  onChange={() => this.onTodoCheck(pos)}
-                  checked={todo.done}
-                />
-              </Grid.Column>
-              <Grid.Column width={10} verticalAlign="middle">
-                {todo.name}
-              </Grid.Column>
-              <Grid.Column width={3} floated="right">
-                {todo.dueDate}
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                <Button
-                  icon
-                  color="blue"
-                  onClick={() => this.onEditButtonClick(todo.photoId)}
-                >
-                  <Icon name="pencil" />
-                </Button>
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                <Button
-                  icon
-                  color="red"
-                  onClick={() => this.onTodoDelete(todo.photoId)}
-                >
-                  <Icon name="delete" />
-                </Button>
-              </Grid.Column>
-              {todo.attachmentUrl && (
-                <Image src={todo.attachmentUrl} size="small" wrapped />
-              )}
-              <Grid.Column width={16}>
-                <Divider />
-              </Grid.Column>
-            </Grid.Row>
-          )
-        })}
+            <Grid.Column key={todo.photoId}>
+              <Grid.Row align="middle">
+                {todo.description}
+              </Grid.Row>
+              <Grid.Row>
+                {todo.attachmentUrl && (
+                  <Image src={todo.attachmentUrl} wrapped style={{height: '200px !important'}}/>
+                )}
+              </Grid.Row>
+              <Grid.Row align="middle">
+                {todo.creationDate}
+              </Grid.Row>
+              <Grid.Row>
+                <Divider/>
+              </Grid.Row>
+              <Grid.Row align="middle">
+                {/* <Grid.Column> */}
+                  {/* <Checkbox
+                    onChange={() => this.onTodoCheck(pos)}
+                    checked={todo.done}
+                  /> */}
+                {/* </Grid.Column>
+                <Grid.Column> */}
+                  <Button
+                    icon
+                    color="blue"
+                    onClick={() => this.onEditButtonClick(todo.photoId)}
+                  >
+                    <Icon name="pencil" />
+                  </Button>
+                  <Button
+                    icon
+                    color="red"
+                    onClick={() => this.onTodoDelete(todo.photoId)}
+                  >
+                    <Icon name="delete" />
+                  </Button>
+              </Grid.Row>
+            </Grid.Column>
+          )})}
+        </Grid.Row>
       </Grid>
     )
   }
 
   calculateDueDate(): string {
     const date = new Date()
-    date.setDate(date.getDate() + 7)
+    date.setDate(date.getDate())
 
     return dateFormat(date, 'yyyy-mm-dd') as string
   }
