@@ -112,6 +112,12 @@ An id of a user can be extracted from a JWT token passed by a client.
 
 You also need to add any necessary resources to the `resources` section of the `serverless.yml` file such as DynamoDB table and S3 bucket.
 
+# Photo Images
+
+![Alt text](images/create-photo.png?raw=true "Image 6")
+![Alt text](images/get-photos.png?raw=true "Image 7")
+![Alt text](images/update-photo.png?raw=true "Image 8")
+![Alt text](images/get-photos-after-update.png?raw=true "Image 9")
 
 # Frontend
 
