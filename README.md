@@ -35,15 +35,15 @@ It should return data that looks like this:
     {
       "photoId": "123",
       "createdAt": "2019-07-27T20:01:45.424Z",
-      "name": "Buy milk",
-      "creationDate": "2019-07-29T20:01:45.424Z",
+      "description": "PUG",
+      "creationDate": "2019-07-29",
       "attachmentUrl": "http://example.com/image.png"
     },
     {
       "photoId": "456",
       "createdAt": "2019-07-27T20:01:45.424Z",
-      "name": "Send a letter",
-      "creationDate": "2019-07-29T20:01:45.424Z",
+      "description": "BOXER",
+      "creationDate": "2019-07-29T20",
       "attachmentUrl": "http://example.com/image.png"
     },
   ]
@@ -57,8 +57,8 @@ It receives a new Photo item to be created in JSON format that looks like this:
 ```json
 {
   "createdAt": "2019-07-27T20:01:45.424Z",
-  "name": "Buy milk",
-  "creationDate": "2019-07-29T20:01:45.424Z",
+  "description": "BOXER",
+  "creationDate": "2019-07-29",
   "attachmentUrl": "http://example.com/image.png"
 }
 ```
@@ -70,8 +70,8 @@ It should return a new Photo item that looks like this:
   "item": {
     "photoId": "123",
     "createdAt": "2019-07-27T20:01:45.424Z",
-    "name": "Buy milk",
-    "creationDate": "2019-07-29T20:01:45.424Z",
+    "description": "BOXER",
+    "creationDate": "2019-07-29T20",
     "attachmentUrl": "http://example.com/image.png"
   }
 }
@@ -83,8 +83,8 @@ It receives an object that contains three fields that can be updated in a Photo 
 
 ```json
 {
-  "name": "Buy bread",
-  "creationDate": "2019-07-29T20:01:45.424Z"
+  "description": "BOXER",
+  "creationDate": "2019-07-29"
 }
 ```
 
